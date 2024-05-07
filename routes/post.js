@@ -6,3 +6,4 @@ const Post = mongoose.model("Post");
 router.get("/posts", (req, res) => {
   //post router
 });
+module.exports = router;

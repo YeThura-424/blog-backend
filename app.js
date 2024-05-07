@@ -1,8 +1,19 @@
 // import express from "express";
 const express = require("express");
+const mongoose = require("mongoose");
+const { MONGOURI } = require("./keys");
 const app = express();
 const PORT = 5000;
 
+//connection to mongodb
+mongoose.connect(MONGOURI);
+mongoose.connection.on("connected", () => {
+  console.log("Connected to Mongoose..");
+});
+
+mongoose.connection.on("error", (error) => {
+  console.log(error, "connecting to Mongoose..");
+});
 //routes
 
 // app.get("/", (req, res) => {
