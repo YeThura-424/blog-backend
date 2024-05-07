@@ -29,12 +29,13 @@ mongoose.connection.on("error", (error) => {
 // });
 
 // Models import
-require("./models/category");
 require("./models/post");
+require("./models/category");
 
 app.use(express.json());
 // Router import
 app.use(require("./routes/post"));
+app.use(require("./routes/category"));
 
 app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);

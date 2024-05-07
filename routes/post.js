@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Post = mongoose.model("Post");
+const Category = mongoose.model("Category");
 
 router.get("/post", (req, res) => {
   Post.find()
@@ -15,24 +16,30 @@ router.get("/post", (req, res) => {
 });
 
 router.post("/new-post", (req, res) => {
-  const { title, description, imgUrl } = req.body;
+  const { title, description, imgUrl, category } = req.body;
   //validation for fields
-  if (!title || !description || !imgUrl) {
+  if (!title || !description || !imgUrl || !category) {
     res.json({ message: "All fields are required !!" });
   }
-
-  const post = new Post({
-    title,
-    description,
-    imgUrl,
-  });
-  post
-    .save()
-    .then(() => {
-      res.json({ message: "Post Created Successfully" });
+  Category.findOne({ _id: category.id })
+    .then((cate) => {
+      const post = new Post({
+        title,
+        description,
+        imgUrl,
+        category: cate,
+      });
+      post
+        .save()
+        .then(() => {
+          res.json({ message: "Post Created Successfully" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })
-    .catch((error) => {
-      console.log(error);
+    .catch((err) => {
+      console.log(err);
     });
 });
 module.exports = router;

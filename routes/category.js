@@ -2,16 +2,34 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-const Post = mongoose.model("Post");
+const Category = mongoose.model("Category");
 
-router.get("/post", (req, res) => {
-  Post.find()
+router.get("/category", (req, res) => {
+  Category.find()
     .populate("category", "_id name")
-    .then((posts) => {
-      res.json({ posts });
+    .then((categories) => {
+      res.json({ categories });
     })
     .catch((err) => {
       console.log(err);
+    });
+});
+router.post("/new-category", (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    res.json({ message: "Name field is required !!" });
+  }
+
+  const category = new Category({
+    name,
+  });
+  category
+    .save()
+    .then(() => {
+      res.json({ message: "Category Created Successfully" });
+    })
+    .catch((error) => {
+      console.log(error);
     });
 });
 module.exports = router;
