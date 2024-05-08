@@ -15,8 +15,20 @@ router.get("/post", (req, res) => {
     });
 });
 
+router.get("/trending-posts", (req, res) => {
+  Post.find()
+    .sort({ numberOfLikes: -1 })
+    .populate("category", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 router.post("/new-post", (req, res) => {
-  const { title, description, imgUrl, category } = req.body;
+  const { title, description, imgUrl, numberOfLikes, category } = req.body;
   //validation for fields
   if (!title || !description || !imgUrl || !category) {
     res.json({ message: "All fields are required !!" });
@@ -27,6 +39,7 @@ router.post("/new-post", (req, res) => {
         title,
         description,
         imgUrl,
+        numberOfLikes,
         category: cate,
       });
       post
