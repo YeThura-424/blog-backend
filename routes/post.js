@@ -27,6 +27,18 @@ router.get("/trending-posts", (req, res) => {
     });
 });
 
+router.get("/fresh-stories", (req, res) => {
+  Post.find()
+    .sort({ _id: -1 })
+    .limit(3)
+    .populate("category", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 router.post("/new-post", (req, res) => {
   const { title, description, imgUrl, numberOfLikes, category } = req.body;
   //validation for fields
