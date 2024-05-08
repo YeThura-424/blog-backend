@@ -6,12 +6,20 @@ const Category = mongoose.model("Category");
 
 router.get("/category", (req, res) => {
   Category.find()
-    .populate("category", "_id name")
     .then((categories) => {
       res.json({ categories });
     })
     .catch((err) => {
       console.log(err);
+    });
+});
+router.get("/category_num", (req, res) => {
+  Category.countDocuments({})
+    .then((categories) => {
+      res.json({ categories });
+    })
+    .catch((error) => {
+      console.log(error);
     });
 });
 router.post("/new-category", (req, res) => {
