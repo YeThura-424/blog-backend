@@ -14,7 +14,26 @@ router.get("/post", (req, res) => {
       console.log(err);
     });
 });
-
+router.get("/featured-posts", (req, res) => {
+  Post.find({ isFeatured: true })
+    .populate("category", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+router.get("/post/:id", (req, res) => {
+  Post.find({ _id: req.params.id })
+    .populate("category", "_id name")
+    .then((post) => {
+      res.json({ post });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 router.get("/trending-posts", (req, res) => {
   Post.find()
     .sort({ numberOfLikes: -1 })
@@ -40,7 +59,8 @@ router.get("/fresh-stories", (req, res) => {
     });
 });
 router.post("/new-post", (req, res) => {
-  const { title, description, imgUrl, numberOfLikes, category } = req.body;
+  const { title, description, imgUrl, numberOfLikes, isFeatured, category } =
+    req.body;
   //validation for fields
   if (!title || !description || !imgUrl || !category) {
     res.json({ message: "All fields are required !!" });
@@ -52,6 +72,7 @@ router.post("/new-post", (req, res) => {
         description,
         imgUrl,
         numberOfLikes,
+        isFeatured,
         category: cate,
       });
       post
