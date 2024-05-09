@@ -27,7 +27,7 @@ const post = mongoose.Schema(
       ref: "Category",
     },
   },
-  { timestapm: true }
+  { timestapms: true }
 );
-
+post.index({ "$**": "text" });
 mongoose.model("Post", post);
