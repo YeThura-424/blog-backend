@@ -34,6 +34,16 @@ router.get("/post/:id", (req, res) => {
       console.log(error);
     });
 });
+router.get("/posts/category/:cateId", (req, res) => {
+  Post.find({ category: { _id: req.params.cateId } })
+    .populate("category", "_id name")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 router.get("/trending-posts", (req, res) => {
   Post.find()
     .sort({ numberOfLikes: -1 })

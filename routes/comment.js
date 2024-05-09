@@ -14,25 +14,31 @@ router.get("/comments", (req, res) => {
     });
 });
 
-router.post("/new-comment/:post_id", (req, res) => {
-  const { body } = req.body;
-  if (!body) {
-    res.json({ message: "Body field is required !!" });
+router.post("/new-comment", (req, res) => {
+  const { body, post_id } = req.body;
+  if (!body || !post_id) {
+    res.json({ message: "All field are required !!" });
   }
-  Post.find({ _id: req.params.post_id })
-    .then((comment_post) => {
-      const comment = new Comment({
-        body,
-        post: comment_post,
-      });
-      comment
-        .save()
-        .then((comment) => {
-          res.json({ comment });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
+  const comment = new Comment({
+    body,
+    post: post_id,
+  });
+  comment
+    .save()
+    .then((comment) => {
+      res.json({ comment });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+router.get("/comments/post/:postId", (req, res) => {
+  Comment.find({ post: { _id: req.params.postId } })
+    .populate("post", "_id title")
+    .then((comments) => {
+      res.json({ comments });
     })
     .catch((error) => {
       console.log(error);
