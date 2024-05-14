@@ -1,5 +1,6 @@
 // import express from "express";
 const express = require("express");
+const cors = require("cors");
 const mongoose = require("mongoose");
 const { MONGOURI } = require("./keys");
 const app = express();
@@ -32,6 +33,9 @@ mongoose.connection.on("error", (error) => {
 require("./models/post");
 require("./models/category");
 require("./models/comment");
+
+// Allow requests from all origins
+app.use(cors());
 
 app.use(express.json());
 // Router import
