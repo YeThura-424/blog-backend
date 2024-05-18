@@ -7,7 +7,10 @@ const app = express();
 const PORT = 5000;
 
 //connection to mongodb
-mongoose.connect(MONGOURI);
+mongoose.connect(MONGOURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 mongoose.connection.on("connected", () => {
   console.log("Connected to Mongoose..");
 });
